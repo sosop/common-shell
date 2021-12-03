@@ -86,3 +86,30 @@ ls /sys/devices/virtual/net/
 
 ```
 
+## 文件描述符
+
+```shell
+# 查看系统总的文件描述符
+cat /proc/sys/fs/file-nr
+
+# lsof 使用
+# eg:查看网络连接文件描述符
+ll /proc/61646/fd | grep 'socket'| wc -l
+lsof -n -p 61646 |wc -l
+
+# 查看进程文件描述符限制
+sysctl -a | grep file
+cat /proc/61646/limits | grep 'open'
+ulimit -a
+ulimit -n
+
+# 修改文件限制
+ulimit -HSn 65536
+vi /etc/security/limits.conf
+* hard nofile 65536
+* soft nofile 65536
+
+sysctl -w fs.file-max=2048
+sysctl -p
+```
+
